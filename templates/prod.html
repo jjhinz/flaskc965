@@ -1,0 +1,34 @@
+<html>
+  <head>
+    <title>Prediction page</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link href="static/bootstrap.min.css" rel="stylesheet" media="screen">
+  </head>
+  <body>
+    <div class="container">
+      <h1>Please enter search criteria</h1>
+      <br>
+      <h4><a href="/home">Return to home page</a></h4>
+      <br>
+      <form action="" method="post">
+        <input type="text" placeholder="Year" name="year" value="{{
+          request.form.username }}">
+        <input type="text" placeholder="Month" name="month" value="{{
+          request.form.password }}">
+        <input type="text" placeholder="Day" name="day" value="{{
+          request.form.password }}">
+        <input type="text" placeholder="DayOfWeek(Sun=0,Sat=6)" name="dow" value="{{
+          request.form.password }}">
+          <input type="text" placeholder="Store" name="store" value="{{
+          request.form.password }}">
+          <input type="text" placeholder="Item" name="item" value="{{
+          request.form.password }}">
+
+        <input class="btn btn-default" type="submit" value="Predict">
+      </form>
+      {% if error %}
+        <p class="error"><strong>Message:</strong> {{ error }}
+      {% endif %}
+    </div>
+  </body>
+</html>
