@@ -75,12 +75,15 @@ check_temp["saleDayOfWeek"] = check_data.date.dt.dayofweek
 if "date" in check_temp.columns:
     check_temp.drop("date", axis=1, inplace=True)
 
-model = RandomForestRegressor(n_jobs=-1,
-                             random_state=42)
-model.fit(td_temp.drop("sales", axis=1), td_temp["sales"])
+#model = RandomForestRegressor(n_jobs=-1,
+#                             random_state=42)
+#model.fit(td_temp.drop("sales", axis=1), td_temp["sales"])
 
-test_pred = model.predict(test_temp)
-check_pred = model.predict(check_temp.drop("sales", axis=1))
+#test_pred = model.predict(test_temp)
+#check_pred = model.predict(check_temp.drop("sales", axis=1))
+
+test_pred = test_temp
+check_pred = check_temp.drop("sales", axis=1))
 
 df_preds = pd.DataFrame()
 df_preds["date"] = test_data["date"]
