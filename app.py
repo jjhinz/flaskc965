@@ -1,12 +1,8 @@
 import pandas as pd
-import numpy as np
-import matplotlib.pyplot as plt
 import plotly as py
 import plotly.express as px
 import plotly.graph_objs as go
 from sklearn.ensemble import RandomForestRegressor
-from plotly.offline import init_notebook_mode, iplot
-#%matplotlib inline
 from flask import Flask, render_template, redirect, url_for, request
 import json
 
