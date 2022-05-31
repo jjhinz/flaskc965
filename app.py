@@ -71,38 +71,20 @@ check_temp["saleDayOfWeek"] = check_data.date.dt.dayofweek
 if "date" in check_temp.columns:
     check_temp.drop("date", axis=1, inplace=True)
 
-#model = RandomForestRegressor(n_jobs=-1,
-#                             random_state=42)
-#model.fit(td_temp.drop("sales", axis=1), td_temp["sales"])
-
-#test_pred = model.predict(test_temp)
-#check_pred = model.predict(check_temp.drop("sales", axis=1))
-
-test_pred = test_temp
-check_pred = check_temp.drop("sales", axis=1))
-
-df_preds = pd.DataFrame()
-df_preds["date"] = test_data["date"]
-df_preds["store"] = test_data["store"]
-df_preds["item"] = test_data["item"]
-df_preds["sales"] = test_pred
+df_preds = pd.read_csv('predsnormal.csv', parse_dates=["date"])
+df_check_preds = pd.read_csv('checkpreds.csv', parse_dates=["date"])
+df_long_preds = pd.read_csv('predslong.csv', parse_dates=["date"])
 
 
-df_check_preds = pd.DataFrame()
-df_check_preds["date"] = check_data["date"]
-df_check_preds["store"] = check_data["store"]
-df_check_preds["item"] = check_data["item"]
-df_check_preds["sales"] = check_pred
+def singlePred(item, store, year, day, month):
+    years = str(year)
+    days = str(day)
+    months = str(month)
+    date = years + '-' + months + '-' + days
+    returndf = pd.DataFrame
+    returndf = df_long_preds.loc[(df_long_preds['date'] == date) & (df_long_preds['item'] == item) & (df_long_preds['store'] == store)]
+    return str(int(returndf['sales'])) + " items"
 
-def singlePred(item, store, year, day, month, dow):
-    pred = pd.DataFrame()
-    pred["store"] = [store]
-    pred["item"] = item
-    pred["saleYear"] = year
-    pred["saleMonth"] = month
-    pred["saleDay"] = day
-    pred["saleDayOfWeek"] = dow
-    return model.predict(pred)
 
 ###gets the total number of slaes for all stores and items for each day of the training data
 preds_sales_daily = df_preds.groupby('date', as_index=False)['sales'].sum()
@@ -185,20 +167,18 @@ def login():
 def predict():
     error = None
     if request.method == 'POST':
-        if int(request.form['year']) < 2017 or int(request.form['year']) > 2050:
-            error = 'Invalid data must be after 2017 and before 2050'
+        if int(request.form['year']) < 2017 or int(request.form['year']) > 2022:
+            error = 'Invalid data must be after 2017 and before 2022'
         elif int(request.form['day']) < 1 or int(request.form['day']) >31:
             error = 'Invalid Day was entered'
         elif int(request.form['month']) < 1 or int(request.form['month']) > 12:
             error = 'Invalid Month was entered'
-        elif int(request.form['dow']) < 0 or int(request.form['dow']) > 6:
-            error = 'Invalid Day of Week was entered'
         elif int(request.form['item']) < 1 or int(request.form['item']) > 50:
             error = 'Invalid item was entered'
         elif int(request.form['store']) < 1 or int(request.form['store']) > 10:
             error = 'Invalid store was entered'
         else:
-            error = singlePred(int(request.form['item']), int(request.form['store']), int(request.form['year']), int(request.form['day']), int(request.form['month']), int(request.form['dow']))
+            error = singlePred(int(request.form['item']), int(request.form['store']), int(request.form['year']), int(request.form['day']), int(request.form['month']))
     return render_template('prod.html', error=error)
 
 @app.route("/storeSales")
